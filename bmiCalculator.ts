@@ -1,6 +1,6 @@
 import { isNotNumber } from "./utils";
 
-const calculateBmi = (height: number, weight: number) => {
+export const calculateBmi = (height: number, weight: number) => {
   if (isNaN(weight))
     throw new Error("weight is NaN");
   if (isNaN(height))
@@ -26,12 +26,18 @@ const calculateBmi = (height: number, weight: number) => {
     return "Obese (Class III)";
 }
 
-if (isNotNumber(process.argv[2]) || isNotNumber(process.argv[3])) {
-  console.log("invalid non-number input");
-  process.exit(1);
+if (require.main === module) {
+  // this module was run directly from the command line as in node xxx.js
+  if (isNotNumber(process.argv[2]) || isNotNumber(process.argv[3])) {
+    console.log("invalid non-number input");
+    process.exit(1);
+  }
+
+  const height = Number(process.argv[2]);
+  const weight = Number(process.argv[3]);
+
+  console.log(calculateBmi(height, weight));
+} else {
+  // this module was not run directly from the command line and probably loaded by something else
 }
 
-const height = Number(process.argv[2]);
-const weight = Number(process.argv[3]);
-
-console.log(calculateBmi(height, weight));
