@@ -1,3 +1,5 @@
+import { isNotNumber } from "./utils";
+
 interface Result {
   periodLength: number,
   trainingDays: number,
@@ -51,7 +53,27 @@ const calculateExercises = (dailyExerciseHour: number[], targetAmount: number): 
   }
 }
 
-const dailyExercise = [3, 0, 0, 0, 0];
-const target = 2;
+if (process.argv.length < 4) {
+  console.log('too few days for exercises');
+  process.exit(1);
+}
+
+// validate target value
+if (isNotNumber(process.argv[2])) {
+  console.log("invalid non-number input");
+  process.exit(1);
+}
+
+const target = Number(process.argv[2])
+const dailyExercise = [];
+
+for (let i = 3; i < process.argv.length; i++) {
+  const element = process.argv[i];
+  if (isNotNumber(element)) {
+    console.log("invalid non-number input");
+    process.exit(1);
+  }
+  dailyExercise.push(Number(element));
+}
 
 console.log(calculateExercises(dailyExercise, target));

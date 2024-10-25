@@ -1,3 +1,5 @@
+import { isNotNumber } from "./utils";
+
 const calculateBmi = (height: number, weight: number) => {
   if (isNaN(weight))
     throw new Error("weight is NaN");
@@ -24,4 +26,12 @@ const calculateBmi = (height: number, weight: number) => {
     return "Obese (Class III)";
 }
 
-console.log(calculateBmi(180, 74));
+if (isNotNumber(process.argv[2]) || isNotNumber(process.argv[3])) {
+  console.log("invalid non-number input");
+  process.exit(1);
+}
+
+const height = Number(process.argv[2]);
+const weight = Number(process.argv[3]);
+
+console.log(calculateBmi(height, weight));
