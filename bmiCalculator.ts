@@ -24,7 +24,7 @@ export const calculateBmi = (height: number, weight: number) => {
     return "Obese (Class II)";
   else
     return "Obese (Class III)";
-}
+};
 
 if (require.main === module) {
   // this module was run directly from the command line as in node xxx.js

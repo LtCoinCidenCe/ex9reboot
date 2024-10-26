@@ -23,7 +23,7 @@ const calculateExercises = (dailyExerciseHour: number[], targetAmount: number): 
         busyDays += 1;
       }
       else {
-        goodDays += 1
+        goodDays += 1;
       }
     }
     else {
@@ -31,8 +31,8 @@ const calculateExercises = (dailyExerciseHour: number[], targetAmount: number): 
       success = false;
     }
   }
-  let rating = (lazydays + busyDays * 2 + goodDays * 3) / n;
-  let ratingDescription = 'not too bad but could be better'
+  const rating = (lazydays + busyDays * 2 + goodDays * 3) / n;
+  let ratingDescription = 'not too bad but could be better';
   if (rating === 3) {
     ratingDescription = 'perfect';
   }
@@ -50,8 +50,8 @@ const calculateExercises = (dailyExerciseHour: number[], targetAmount: number): 
     ratingDescription,
     target: targetAmount,
     average: sum / n
-  }
-}
+  };
+};
 
 if (process.argv.length < 4) {
   console.log('too few days for exercises');
@@ -64,7 +64,7 @@ if (isNotNumber(process.argv[2])) {
   process.exit(1);
 }
 
-const target = Number(process.argv[2])
+const target = Number(process.argv[2]);
 const dailyExercise = [];
 
 for (let i = 3; i < process.argv.length; i++) {

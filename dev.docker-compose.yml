@@ -4,7 +4,7 @@ services:
     working_dir: /usr/src/app
     volumes:
       - ./:/usr/src/app
-    command: [ "npm", "install", "--verbose" ]
+    command: [ "npm", "install", "--verbose", "--no-audit" ]
     container_name: installer
 
   devprocess:
