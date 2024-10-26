@@ -1,11 +1,11 @@
 services:
-  npminstall:
-    image: node:20
-    working_dir: /usr/src/app
-    volumes:
-      - ./:/usr/src/app
-    command: [ "npm", "install", "--verbose", "--no-audit" ]
-    container_name: installer
+  # npminstall:
+  #   image: node:20
+  #   working_dir: /usr/src/app
+  #   volumes:
+  #     - ./:/usr/src/app
+  #   command: [ "npm", "install", "--verbose", "--no-audit" ]
+  #   container_name: installer
 
   devprocess:
     image: node:20
@@ -14,7 +14,7 @@ services:
       - ./:/usr/src/app
     ports:
       - 5173:5173
-    depends_on:
-      npminstall:
-        condition: service_completed_successfully
-    command: [ "npm", "run", "dev" ]
+    # depends_on:
+    #   npminstall:
+    #     condition: service_completed_successfully
+    command: [ "/bin/bash", "-c", "npm install --verbose --no-audit && npm run dev" ]
