@@ -10,7 +10,7 @@ interface Result {
   average: number,
 }
 
-const calculateExercises = (dailyExerciseHour: number[], targetAmount: number): Result => {
+export const calculateExercises = (dailyExerciseHour: number[], targetAmount: number): Result => {
   const n = dailyExerciseHour.length;
   let trainingDays = 0, sum = 0, success = true, goodDays = 0, busyDays = 0, lazydays = 0;
   for (let i = 0; i < n; i++) {
@@ -53,27 +53,32 @@ const calculateExercises = (dailyExerciseHour: number[], targetAmount: number): 
   };
 };
 
-if (process.argv.length < 4) {
-  console.log('too few days for exercises');
-  process.exit(1);
-}
+if (require.main === module) {
+  // this module was run directly from the command line as in node xxx.js
+  if (process.argv.length < 4) {
+    console.log('too few days for exercises');
+    process.exit(1);
+  }
 
-// validate target value
-if (isNotNumber(process.argv[2])) {
-  console.log("invalid non-number input");
-  process.exit(1);
-}
-
-const target = Number(process.argv[2]);
-const dailyExercise = [];
-
-for (let i = 3; i < process.argv.length; i++) {
-  const element = process.argv[i];
-  if (isNotNumber(element)) {
+  // validate target value
+  if (isNotNumber(process.argv[2])) {
     console.log("invalid non-number input");
     process.exit(1);
   }
-  dailyExercise.push(Number(element));
-}
 
-console.log(calculateExercises(dailyExercise, target));
+  const target = Number(process.argv[2]);
+  const dailyExercise = [];
+
+  for (let i = 3; i < process.argv.length; i++) {
+    const element = process.argv[i];
+    if (isNotNumber(element)) {
+      console.log("invalid non-number input");
+      process.exit(1);
+    }
+    dailyExercise.push(Number(element));
+  }
+  console.log(calculateExercises(dailyExercise, target));
+}
+else {
+  // this module was not run directly from the command line and probably loaded by something else
+}
