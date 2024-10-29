@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
-import diagnoses from "../data/diagnoses";
+import diagnoseService from "./services/diagnoseService";
+import patientService from "./services/patientService";
+
 const app = express();
 
 app.use(express.json());
@@ -14,7 +16,11 @@ app.get("/api/ping", (_req, res) => {
 });
 
 app.get("/api/diagnoses", (_req, res) => {
-  res.json(diagnoses).end();
+  res.json(diagnoseService.getDiagnoses()).end();
+});
+
+app.get("/api/patients", (_req, res) => {
+  res.json(patientService.getNonSensitivePatients()).end();
 });
 
 app.listen(PORT, () => {
