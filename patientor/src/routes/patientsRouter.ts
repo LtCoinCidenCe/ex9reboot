@@ -16,7 +16,7 @@ route.post("/", (req, res) => {
   }
   catch (err: unknown) {
     if (err instanceof Error) {
-      res.json({ error: "Error: " + err }).end();
+      res.status(400).json({ error: "Error: " + err }).end();
     }
   }
 });
