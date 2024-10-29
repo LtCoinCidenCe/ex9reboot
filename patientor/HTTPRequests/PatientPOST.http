@@ -7,4 +7,4 @@ GET {{patientorService}}/api/patients
 POST {{patientorService}}/api/patients
 Content-Type: application/json
 
-{"dateOfBirth":"fakedate","gender":"male","name":"Noname","occupation":"no job","ssn":"secret"}
+{"dateOfBirth":"1996-06-30","gender":"male","name":"Noname","occupation":"no job","ssn":"secret"}

@@ -9,10 +9,16 @@ route.get("/", (_req, res) => {
 });
 
 route.post("/", (req, res) => {
-  const newPatient = toNewPatient(req.body);
-  const result = patientService.addPatient(newPatient);
-  res.json(result).end();
-  return;
+  try {
+    const newPatient = toNewPatient(req.body);
+    const result = patientService.addPatient(newPatient);
+    res.json(result).end();
+  }
+  catch (err: unknown) {
+    if (err instanceof Error) {
+      res.json({ error: "Error: " + err }).end();
+    }
+  }
 });
 
 export default route;
