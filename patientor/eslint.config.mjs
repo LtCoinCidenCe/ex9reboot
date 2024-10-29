@@ -19,6 +19,7 @@ export default tseslint.config({
   },
   ignores: ["build/*"],
   rules: {
+    '@stylistic/quotes': ["error", "double"],
     '@stylistic/semi': 'error',
     '@typescript-eslint/no-unsafe-assignment': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
