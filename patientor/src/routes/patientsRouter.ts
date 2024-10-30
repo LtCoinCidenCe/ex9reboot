@@ -1,6 +1,8 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import patientService from "../services/patientService";
-import { toNewPatient } from "../utils";
+import { NewPatientSchema } from "../utils";
+import { NewPatient, Patient } from "../types";
+import { ZodError } from "zod";
 
 const route = express.Router();
 
@@ -8,17 +10,22 @@ route.get("/", (_req, res) => {
   res.json(patientService.getNonSensitivePatients()).end();
 });
 
-route.post("/", (req, res) => {
+const patientValidator = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const newPatient = toNewPatient(req.body);
-    const result = patientService.addPatient(newPatient);
-    res.json(result).end();
-  }
-  catch (err: unknown) {
-    if (err instanceof Error) {
-      res.status(400).json({ error: "Error: " + err }).end();
+    NewPatientSchema.parse(req.body);
+    next();
+  } catch (err: unknown) {
+    if (err instanceof ZodError) {
+      res.status(400).json(err).end();
+    } else {
+      next(err);
     }
   }
+};
+
+route.post("/", patientValidator, (req: Request<unknown, unknown, NewPatient>, res: Response<Patient>) => {
+  const result = patientService.addPatient(req.body);
+  res.json(result).end();
 });
 
 export default route;

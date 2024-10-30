@@ -1,5 +1,5 @@
 import { Patient } from "../src/types";
-import { parseGender } from "../src/utils";
+import { NewPatientSchema } from "../src/utils";
 
 const data = [
   {
@@ -45,8 +45,10 @@ const data = [
 ];
 
 const patientList: Patient[] = data.map(
-  ({ id, name, dateOfBirth, ssn, gender, occupation }) =>
-    ({ id, name, dateOfBirth, ssn, gender: parseGender(gender), occupation })
+  p => ({
+    id: p.id,
+    ...NewPatientSchema.parse(p)
+  })
 );
 
 export default patientList;
