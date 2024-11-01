@@ -19,7 +19,7 @@ function App() {
     <h1>Ilari's flights</h1>
     <h2>Diary Entries</h2>
     {diaries.map(ee => (
-      <div>
+      <div key={ee.id}>
         <h3>{ee.date}</h3>
         <div>visibility: {ee.visibility}</div>
         <div>weather: {ee.weather}</div>
