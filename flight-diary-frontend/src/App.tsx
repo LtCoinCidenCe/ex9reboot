@@ -7,12 +7,9 @@ function App() {
   const [diaries, setDiaries] = useState<DiaryEntry[]>([])
 
   useEffect(() => {
-    const doit = async () => {
-      const body = await fetch(baseUrl, { method: 'GET' })
-        .then(response => response.json())
-      setDiaries(body as DiaryEntry[]);
-    }
-    doit();
+    fetch(baseUrl, { method: 'GET' })
+      .then(response => response.json())
+      .then(body => setDiaries(body as DiaryEntry[]))
   }, [])
 
   const diarySubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -22,13 +19,15 @@ function App() {
     const obj = Object.fromEntries(formData)
 
     console.log(obj)
-    await fetch(baseUrl, {
+    const response = await fetch(baseUrl, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(obj)
     })
+    const newD = await response.json()
+    setDiaries(diaries.concat(newD))
   }
 
   return <>
