@@ -5,6 +5,8 @@ const baseUrl = '/api/diaries'
 
 function App() {
   const [diaries, setDiaries] = useState<DiaryEntry[]>([])
+  const [errorMessage, setErrorMessage] = useState('')
+  const [clock, setClock] = useState(0);
 
   useEffect(() => {
     fetch(baseUrl, { method: 'GET' })
@@ -19,6 +21,8 @@ function App() {
     const obj = Object.fromEntries(formData)
 
     console.log(obj)
+
+
     const response = await fetch(baseUrl, {
       method: 'POST',
       headers: {
@@ -26,13 +30,27 @@ function App() {
       },
       body: JSON.stringify(obj)
     })
+    if (!response.ok) {
+      const message = await response.text();
+      setErrorMessage(message.substring(22));
+      clearTimeout(clock);
+      setClock(setTimeout(() => {
+        setErrorMessage('');
+      }, 5000));
+      return;
+    }
     const newD = await response.json()
-    setDiaries(diaries.concat(newD))
+    setDiaries(diaries.concat(newD));
+    (formElement[0] as HTMLInputElement).value = '';
+    (formElement[1] as HTMLInputElement).value = '';
+    (formElement[2] as HTMLInputElement).value = '';
+    (formElement[3] as HTMLInputElement).value = '';
   }
 
   return <>
     <h1>Ilari's Flights</h1>
     <h2>New Entry</h2>
+    <p style={{ color: 'red' }}>{errorMessage}</p>
     <form onSubmit={diarySubmit}>
       <table>
         <tbody>
