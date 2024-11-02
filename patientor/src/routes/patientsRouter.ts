@@ -23,6 +23,16 @@ const patientValidator = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+route.get("/:id", (req, res) => {
+  const found = patientService.getPatientbyId(req.params.id);
+  if (!found) {
+    res.status(404).end();
+    return;
+  }
+  res.json(found).end();
+  return;
+});
+
 route.post("/", patientValidator, (req: Request<unknown, unknown, NewPatient>, res: Response<Patient>) => {
   const result = patientService.addPatient(req.body);
   res.json(result).end();
