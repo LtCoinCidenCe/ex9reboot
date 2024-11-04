@@ -21,7 +21,7 @@ export type NoSSNPatient = Omit<Patient, "ssn" | "entries">;
 export type NewPatient = z.infer<typeof NewPatientSchema>;
 
 export enum Gender {
-  male = "male",
-  female = "female",
-  other = "other",
+  Male = "male",
+  Female = "female",
+  Other = "other",
 }
