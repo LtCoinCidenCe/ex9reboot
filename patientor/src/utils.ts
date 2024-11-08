@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z, ZodError } from "zod";
 import { Entry, Gender, HealthCheckRating } from "./types";
 
 export const NewPatientSchema = z.object({
@@ -28,42 +28,57 @@ export const EntrySchema = z.object({
   }).optional()
 });
 
-export const entrySanitizer = (body: unknown): body is Entry => {
+/**
+ * fake an id first as body.id before using the function
+ * @param body to be parsed
+ * @returns body as Entry
+ * @throws exception with message
+ */
+export const entrySanitizerParser = (body: unknown): Entry => {
+  let entry;
   try {
-    const entry = EntrySchema.parse(body);
+    entry = EntrySchema.parse(body);
     // console.log("entry", entry);
     switch (entry.type) {
       case "HealthCheck": {
         const rating = entry.healthCheckRating;
         if (rating === undefined) {
-          return false;
+          throw new Error("missing rating");
         }
         break;
       }
       case "Hospital": {
         const { discharge } = entry;
         if (!discharge) {
-          return false;
+          throw new Error("missing discharge");
         }
         break;
       }
       case "OccupationalHealthcare": {
         const { employerName, sickLeave } = entry;
         if (employerName === undefined || employerName.length === 0) {
-          return false;
+          throw new Error("invalid employer name");
         }
         if (!sickLeave) {
-          return false;
+          throw new Error("missing sick leave");
         }
         break;
       }
       default:
-        return false;
+        throw new Error("invalid entry type");
         break;
     }
   }
-  catch {
-    return false;
+  catch (err: unknown) {
+    if (err instanceof ZodError) {
+      // console.log("err.errors", err.errors);
+      // console.log("err.issues", err.issues);
+      let msg = err.errors[0].message;
+      if (msg === "Required") {
+        msg = err.errors[0].path.join(".") + " required";
+      }
+      throw new Error(msg);
+    }
   }
-  return true;
+  return entry as Entry;
 };

@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { v1 as uuid } from "uuid";
 import { ZodError } from "zod";
 import patientService from "../services/patientService";
-import { entrySanitizer, NewPatientSchema } from "../utils";
+import { entrySanitizerParser, NewPatientSchema } from "../utils";
 import { Entry, NewPatient, Patient } from "../types";
 
 const route = express.Router();
@@ -48,12 +48,13 @@ const newEntryParser = (req: Request, res: Response, next: NextFunction) => {
   const cand = req.body as { id: string };
   cand.id = "tempid"; // fake an id to proceed
   try {
-    if (!entrySanitizer(cand)) {
-      res.status(400).end();
-      return;
-    }
+    entrySanitizerParser(req.body);
     next();
   } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(400).json({ "error": error.message }).end();
+      return;
+    }
     next(error);
   }
 };
