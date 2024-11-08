@@ -29,11 +29,9 @@ export const EntrySchema = z.object({
 });
 
 export const entrySanitizer = (body: unknown): body is Entry => {
-  if (typeof body !== "object" || body === null)
-    return false;
   try {
     const entry = EntrySchema.parse(body);
-    console.log("entry", entry);
+    // console.log("entry", entry);
     switch (entry.type) {
       case "HealthCheck": {
         const rating = entry.healthCheckRating;

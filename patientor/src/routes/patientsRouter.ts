@@ -43,8 +43,12 @@ route.post("/", patientValidator, (
 });
 
 const newEntryParser = (req: Request, res: Response, next: NextFunction) => {
+  if (typeof req.body !== "object" || req.body === null)
+    res.status(400).end();
+  const cand = req.body as { id: string };
+  cand.id = "tempid"; // fake an id to proceed
   try {
-    if (!entrySanitizer(req.body)) {
+    if (!entrySanitizer(cand)) {
       res.status(400).end();
       return;
     }
