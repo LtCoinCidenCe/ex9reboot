@@ -73,7 +73,7 @@ export const entrySanitizerParser = (body: unknown): Entry => {
     if (err instanceof ZodError) {
       // console.log("err.errors", err.errors);
       // console.log("err.issues", err.issues);
-      const msg = err.errors[0].path.join(".") + " required";
+      const msg = err.errors[0].path.join(".") + " " + err.errors[0].message;
       throw new Error(msg);
     }
   }
